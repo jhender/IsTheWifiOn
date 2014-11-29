@@ -32,6 +32,9 @@ public class MainActivity extends Activity {
         View.OnClickListener onClickListener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textView1.setText("");
+                textView2.setText("");
+                textView3.setText("");
                 checkWifi();
             }
         };
@@ -57,7 +60,7 @@ public class MainActivity extends Activity {
 
 
         String a = activeNetwork.getTypeName();
-        textView2.setText("You are currently using " + a +  "data.");
+        textView2.setText("You are currently using " + a + " data.");
 
 
         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
@@ -67,9 +70,9 @@ public class MainActivity extends Activity {
             textView3.setText("Wifi not connected");
 
 
-            NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            return ((netInfo != null) && netInfo.isConnected());
-        }
+//            NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//            return ((netInfo != null) && netInfo.isConnected());
+
 
     }
 
