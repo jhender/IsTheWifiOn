@@ -26,7 +26,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:id="@+id/textView8"
-                android:text="Connection"
+                android:text="@string/subtitleConnection"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="15dp"
@@ -44,7 +44,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:id="@+id/textView7"
-                android:text="WIFI"
+                android:text="@string/subtitleWifi"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="15dp"
@@ -69,7 +69,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:id="@+id/textView6"
-                android:text="Mobile"
+                android:text="@string/subtitleMobile"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="15dp"
@@ -88,7 +88,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView5"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="40dp"
                 />
         </LinearLayout>
     </ScrollView>

@@ -2,7 +2,6 @@ package com.flowzinga.isthewifion;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -81,7 +80,7 @@ public class MainActivity extends Activity {
             textView2.setText("You are connected to Wifi network: " + d);
         }
         else {
-            textView3.setText("Wifi not connected");
+            textView2.setText("Wifi not connected");
         }
 
 
@@ -93,7 +92,11 @@ public class MainActivity extends Activity {
 //        textView4.append("getState: " + f);
 
         if (netInfo.isAvailable()) {
-            textView4.setText("Mobile Network is available.");
+            if (netInfo.isConnected()) {
+                textView4.setText("Mobile Network is Connected.");
+            } else {
+                textView4.setText("Mobile Network is available but not Connected.");
+            }
         }
         if (netInfo.isRoaming()) {
             textView4.append("Warning: You are on roaming.");
