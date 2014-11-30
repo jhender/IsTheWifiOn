@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">IsTheWifiOn</string>
-    <string name="textView1">Hello world!</string>
+    <string name="app_name">Is The Wifi On</string>
+    <string name="textView1">-</string>
     <string name="action_settings">Settings</string>
 
-    <string name="button_text_1">CHECK WIFI NOW</string>
+    <string name="button_text_1">Check again</string>
 
 </resources>

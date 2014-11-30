@@ -2,6 +2,7 @@ package com.flowzinga.isthewifion;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ public class MainActivity extends Activity {
     TextView textView1;
     TextView textView2;
     TextView textView3;
+    TextView textView4;
+    TextView textView5;
 
 
     @Override
@@ -28,6 +31,8 @@ public class MainActivity extends Activity {
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
+        textView4 = (TextView) findViewById(R.id.textView4);
+        textView5 = (TextView) findViewById(R.id.textView5);
 
         View.OnClickListener onClickListener1 = new View.OnClickListener() {
             @Override
@@ -35,45 +40,70 @@ public class MainActivity extends Activity {
                 textView1.setText("");
                 textView2.setText("");
                 textView3.setText("");
+                textView4.setText("");
+                textView5.setText("");
                 checkWifi();
             }
         };
 
         buttonCheck.setOnClickListener(onClickListener1);
+
+        checkWifi();
     }
 
 
     public void checkWifi(){
 
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
+        // Check overall data connection
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (!isConnected) {
             textView1.setText("You are not connected to the internet.");
+            textView1.setBackgroundColor(getResources().getColor(R.color.orange));
             return;
         }
         else {
-            textView1.setText("You are connected to the internet.");
+            String a = activeNetwork.getTypeName();
+            textView1.setText("You are connected to the internet, and you are using " + a + " data.");
+            textView1.setBackgroundColor(getResources().getColor(R.color.green));
         }
 
+        // Check active data connection name
+        String b = activeNetwork.getSubtypeName();
+        String c = activeNetwork.toString();
+//        textView2.setText("You are currently using " + a + " data.");
 
-        String a = activeNetwork.getTypeName();
-        textView2.setText("You are currently using " + a + " data.");
-
-
+        // Wifi details
         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-            textView3.setText("Wifi connected.");
+            String d = activeNetwork.getExtraInfo();
+            textView2.setText("You are connected to Wifi network: " + d);
         }
-        else
+        else {
             textView3.setText("Wifi not connected");
+        }
 
 
-//            NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        // Mobile details
+        NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 //            return ((netInfo != null) && netInfo.isConnected());
 
+        String f = netInfo.getState().toString();
+//        textView4.append("getState: " + f);
 
+        if (netInfo.isAvailable()) {
+            textView4.setText("Mobile Network is available.");
+        }
+        if (netInfo.isRoaming()) {
+            textView4.append("Warning: You are on roaming.");
+        } else {
+            textView4.append("You are not on roaming.");
+        }
+
+        //to remove
+        String e = netInfo.toString();
+        textView5.setText(b + c + e);
     }
 
 
