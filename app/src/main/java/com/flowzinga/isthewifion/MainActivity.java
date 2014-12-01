@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,6 @@ public class MainActivity extends Activity {
     TextView textView3;
     TextView textView4;
     TextView textView5;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,69 +54,93 @@ public class MainActivity extends Activity {
 
     public void checkWifi(){
 
+        // Rough network connectivity manager
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        // Check overall data connection
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        if (!isConnected) {
-            textView1.setText("You are not connected to the internet.");
-            textView1.setBackgroundColor(getResources().getColor(R.color.orange));
-            return;
-        }
-        else {
-            String a = activeNetwork.getTypeName();
-            textView1.setText("You are connected to the internet, and you are using " + a + " data.");
-            textView1.setBackgroundColor(getResources().getColor(R.color.green));
-        }
-
-        // Check active data connection name
-        String b = activeNetwork.getSubtypeName();
-        String c = activeNetwork.toString();
-//        textView2.setText("You are currently using " + a + " data.");
-
-        // Wifi details
-        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-            String d = activeNetwork.getExtraInfo();
-            textView2.setText("You are connected to Wifi network: " + d);
-        }
-        else {
-            textView2.setText("Wifi not connected");
-        }
-
         // Wifi Manager
         WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-        if (wifiManager.isWifiEnabled()) {
-            textView2.append("Wifi is Enabled.");
-        } else {
-            textView2.append("Wifi is Disabled.");
-        }
-
-
 
         // Mobile details
         NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 //            return ((netInfo != null) && netInfo.isConnected());
 
-        String f = netInfo.getState().toString();
+        // Check overall data connection
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        // NOT CONNECTED
+        if (!isConnected) {
+            textView1.setText("You are not connected to the internet.");
+            textView1.setBackgroundColor(getResources().getColor(R.color.orange));
+//            return;
+
+            // Is aeroplane mode on?
+            if (isAirplaneModeOn()) {
+                textView2.setText("Your phone is on Airplane mode. Please turn this off if you want to connect to the internet.");
+            } else {
+
+                // Wifi details
+                if (wifiManager.isWifiEnabled()) {
+                    textView2.setText("Your wifi is Enabled but not Connected.");
+                } else {
+                    textView2.setText("Your wifi is disabled. Please enable to use Wifi.");
+                }
+
+            }
+
+
+
+
+        }
+        // CONNECTED
+        else {
+            String a = activeNetwork.getTypeName();
+            textView1.setText("You are connected to the internet, and you are using " + a + " data.");
+            textView1.setBackgroundColor(getResources().getColor(R.color.green));
+
+            // Wifi details
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                String d = activeNetwork.getExtraInfo();
+                textView2.setText("You are connected to Wifi network: " + d);
+            }
+            else {
+                textView2.setText("Wifi not connected");
+
+                if (wifiManager.isWifiEnabled()) {
+                    textView2.setText("Your Wifi is Enabled but not Connected.");
+                } else {
+                    textView2.setText("Your Wifi is Disabled.");
+                }
+            }
+
+            String f = netInfo.getState().toString();
 //        textView4.append("getState: " + f);
 
-        if (netInfo.isAvailable()) {
-            if (netInfo.isConnected()) {
-                textView4.setText("Mobile Network is Connected.");
-            } else {
-                textView4.setText("Mobile Network is available but not Connected.");
+            if (netInfo.isAvailable()) {
+                if (netInfo.isConnected()) {
+                    textView4.setText("Mobile Network is Connected.");
+                } else {
+                    textView4.setText("Mobile Network is available but being used.");
+                }
             }
-        }
-        if (netInfo.isRoaming()) {
-            textView4.append("Warning: You are on roaming.");
-        } else {
-            textView4.append("You are not on roaming.");
+            if (netInfo.isRoaming()) {
+                textView4.append(" Warning: You are on roaming.");
+            } else {
+//            textView4.append("You are not on roaming.");
+            }
+
+//            String e = netInfo.toString();
+
+//            // Check active data connection name
+//            String b = activeNetwork.getSubtypeName();
+//            String c = activeNetwork.toString();
+//            textView5.setText(b + c + e);
         }
 
-        //to remove
-        String e = netInfo.toString();
-        textView5.setText(b + c + e);
+    }
+
+    private static boolean isAirplaneModeOn() {
+        String a = Settings.Global.AIRPLANE_MODE_ON;
+        return (a.equals("airplane_mode_on"));
     }
 
 
