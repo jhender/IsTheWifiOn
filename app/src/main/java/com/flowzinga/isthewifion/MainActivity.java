@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,6 +83,15 @@ public class MainActivity extends Activity {
         else {
             textView2.setText("Wifi not connected");
         }
+
+        // Wifi Manager
+        WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager.isWifiEnabled()) {
+            textView2.append("Wifi is Enabled.");
+        } else {
+            textView2.append("Wifi is Disabled.");
+        }
+
 
 
         // Mobile details
