@@ -2,6 +2,7 @@ package com.flowzinga.isthewifion;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -18,6 +19,7 @@ public class MainActivity extends Activity {
     Button buttonCheck;
     Button buttonWifiOn;
     Button buttonWifiOff;
+    Button buttonWifiSettings;
     TextView textView1;
     TextView textView2;
     TextView textView3;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity {
         buttonCheck = (Button) findViewById(R.id.button1);
         buttonWifiOn = (Button) findViewById(R.id.button_wifi_on);
         buttonWifiOff = (Button) findViewById(R.id.button_wifi_off);
+        buttonWifiSettings = (Button) findViewById(R.id.button_wifi_settings);
 
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
@@ -66,12 +69,22 @@ public class MainActivity extends Activity {
                 turnWifiOff();
             }
         };
+        View.OnClickListener onClickListener4 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));            }
+        };
+
+
 
         buttonCheck.setOnClickListener(onClickListener1);
         buttonWifiOn.setOnClickListener(onClickListener2);
         buttonWifiOff.setOnClickListener(onClickListener3);
+        buttonWifiSettings.setOnClickListener(onClickListener4);
 
         checkWifi();
+
+        addShortcutIcon();
     }
 
 
@@ -93,12 +106,16 @@ public class MainActivity extends Activity {
         // NOT CONNECTED
         if (!isConnected) {
             textView1.setText("You are not connected to the internet.");
-            textView1.setBackgroundColor(getResources().getColor(R.color.orange));
+            textView1.setTextColor(getResources().getColor(R.color.orange));
 //            return;
 
             // Is aeroplane mode on?
             if (isAirplaneModeOn()) {
-                textView2.setText("Your phone is on Airplane mode. Please turn this off if you want to connect to the internet.");
+                textView2.setText("Disconnected");
+                textView2.setTextColor(getResources().getColor(R.color.orange));
+                textView4.setText("Your phone is on Airplane mode. Please turn this off if you want to connect to the internet.");
+                textView4.setTextColor(getResources().getColor(R.color.orange));
+
             } else {
 
                 // Wifi details
@@ -118,12 +135,13 @@ public class MainActivity extends Activity {
         else {
             String a = activeNetwork.getTypeName();
             textView1.setText("You are connected to the internet, and you are using " + a + " data.");
-            textView1.setBackgroundColor(getResources().getColor(R.color.green));
+            textView1.setTextColor(getResources().getColor(R.color.green));
 
             // Wifi details
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
                 String d = activeNetwork.getExtraInfo();
                 textView2.setText("You are connected to Wifi network: " + d);
+                textView2.setTextColor(getResources().getColor(R.color.green));
             }
             else {
                 textView2.setText("Wifi not connected");
@@ -132,6 +150,7 @@ public class MainActivity extends Activity {
                     textView2.setText("Your Wifi is Enabled but not Connected.");
                 } else {
                     textView2.setText("Your Wifi is Disabled.");
+                    textView2.setTextColor(getResources().getColor(R.color.orange));
                 }
             }
 
@@ -141,12 +160,21 @@ public class MainActivity extends Activity {
             if (netInfo.isAvailable()) {
                 if (netInfo.isConnected()) {
                     textView4.setText("Mobile Network is Connected.");
+                    textView4.setTextColor(getResources().getColor(R.color.green));
+
                 } else {
                     textView4.setText("Mobile Network is available but not being used.");
+                    textView4.setTextColor(getResources().getColor(R.color.green));
+
                 }
+            } else {
+                textView4.setText("You are not connected to mobile network.");
+                textView4.setTextColor(getResources().getColor(R.color.orange));
             }
             if (netInfo.isRoaming()) {
                 textView4.append(" Warning: You are on roaming.");
+                textView4.setTextColor(getResources().getColor(R.color.orange));
+
             } else {
 //            textView4.append("You are not on roaming.");
             }
@@ -176,25 +204,46 @@ public class MainActivity extends Activity {
         checkWifi();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+////        if (id == R.id.action_settings) {
+////            return true;
+////        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    // Shortcut
+    // onClick of addShortcutIcon
+    private void addShortcutIcon() {
+        //shorcutIntent object
+        Intent shortcutIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+        //shortcutIntent is added with addIntent
+        Intent addIntent = new Intent();
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Is The Wifi On");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.ic_launcher));
+
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        // finally broadcast the new Intent
+        getApplicationContext().sendBroadcast(addIntent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
