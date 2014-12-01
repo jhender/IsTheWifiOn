@@ -16,11 +16,14 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     Button buttonCheck;
+    Button buttonWifiOn;
+    Button buttonWifiOff;
     TextView textView1;
     TextView textView2;
     TextView textView3;
     TextView textView4;
-    TextView textView5;
+//    TextView textView5;
+    WifiManager wifiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,16 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         buttonCheck = (Button) findViewById(R.id.button1);
+        buttonWifiOn = (Button) findViewById(R.id.button_wifi_on);
+        buttonWifiOff = (Button) findViewById(R.id.button_wifi_off);
+
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
         textView4 = (TextView) findViewById(R.id.textView4);
-        textView5 = (TextView) findViewById(R.id.textView5);
+//        textView5 = (TextView) findViewById(R.id.textView5);
+
+        wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
 
         View.OnClickListener onClickListener1 = new View.OnClickListener() {
             @Override
@@ -41,12 +49,27 @@ public class MainActivity extends Activity {
                 textView2.setText("");
                 textView3.setText("");
                 textView4.setText("");
-                textView5.setText("");
+//                textView5.setText("");
                 checkWifi();
             }
         };
 
+        View.OnClickListener onClickListener2 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnWifiOn();
+            }
+        };
+        View.OnClickListener onClickListener3 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnWifiOff();
+            }
+        };
+
         buttonCheck.setOnClickListener(onClickListener1);
+        buttonWifiOn.setOnClickListener(onClickListener2);
+        buttonWifiOff.setOnClickListener(onClickListener3);
 
         checkWifi();
     }
@@ -59,7 +82,7 @@ public class MainActivity extends Activity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         // Wifi Manager
-        WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+//        WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
 
         // Mobile details
         NetworkInfo netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -119,7 +142,7 @@ public class MainActivity extends Activity {
                 if (netInfo.isConnected()) {
                     textView4.setText("Mobile Network is Connected.");
                 } else {
-                    textView4.setText("Mobile Network is available but being used.");
+                    textView4.setText("Mobile Network is available but not being used.");
                 }
             }
             if (netInfo.isRoaming()) {
@@ -143,6 +166,15 @@ public class MainActivity extends Activity {
         return (a.equals("airplane_mode_on"));
     }
 
+    private void turnWifiOn() {
+        wifiManager.setWifiEnabled(true);
+        checkWifi();
+    }
+
+    private void turnWifiOff() {
+        wifiManager.setWifiEnabled(false);
+        checkWifi();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
