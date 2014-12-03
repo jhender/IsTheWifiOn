@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
     Button buttonWifiOn;
     Button buttonWifiOff;
     Button buttonWifiSettings;
+    Button buttonHotspotSettings;
     TextView textView1;
     TextView textView2;
     TextView textView3;
@@ -36,10 +37,11 @@ public class MainActivity extends Activity {
         buttonWifiOn = (Button) findViewById(R.id.button_wifi_on);
         buttonWifiOff = (Button) findViewById(R.id.button_wifi_off);
         buttonWifiSettings = (Button) findViewById(R.id.button_wifi_settings);
+        buttonHotspotSettings = (Button) findViewById(R.id.button_hotspot_settings);
 
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
-        textView3 = (TextView) findViewById(R.id.textView3);
+//        textView3 = (TextView) findViewById(R.id.textView3);
         textView4 = (TextView) findViewById(R.id.textView4);
 //        textView5 = (TextView) findViewById(R.id.textView5);
 
@@ -50,7 +52,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 textView1.setText("");
                 textView2.setText("");
-                textView3.setText("");
+//                textView3.setText("");
                 textView4.setText("");
 //                textView5.setText("");
                 checkWifi();
@@ -74,13 +76,21 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));            }
         };
-
+        View.OnClickListener onClickListener5 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+                startActivity(intent);
+            }
+        };
 
 
         buttonCheck.setOnClickListener(onClickListener1);
         buttonWifiOn.setOnClickListener(onClickListener2);
         buttonWifiOff.setOnClickListener(onClickListener3);
         buttonWifiSettings.setOnClickListener(onClickListener4);
+        buttonHotspotSettings.setOnClickListener(onClickListener5);
 
         checkWifi();
 

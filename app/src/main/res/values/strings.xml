@@ -8,5 +8,6 @@
     <string name="subtitleConnection">Connection</string>
     <string name="subtitleWifi">WIFI</string>
     <string name="subtitleMobile">Mobile</string>
+    <string name="hotspot">Hotspot settings</string>
 
 </resources>

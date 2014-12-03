@@ -78,7 +78,7 @@
                         android:text="@string/subtitleWifi"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="0dp"
                         android:textColor="@color/black"
 
                         />
@@ -143,7 +143,7 @@
                         android:text="@string/subtitleMobile"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop=""
                         android:textColor="@color/black"
 
                         />
@@ -159,14 +159,11 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <TextView
-                android:text="@string/textView1"
-                android:textSize="16sp"
-                android:layout_width="fill_parent"
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView3"
-                android:padding="5dp"
-                android:layout_marginTop="0dp"
+                android:text="@string/hotspot"
+                android:id="@+id/button_hotspot_settings"
                 />
         </LinearLayout>
     </ScrollView>
